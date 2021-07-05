@@ -2,29 +2,54 @@ import { html, css, LitElement, property, customElement } from 'lit-element';
 import { nothing } from 'lit-html';
 import CloseCircleIcon from '@internetarchive/icon-close-circle';
 
+import { IAFile, IAMD, TimelineMoment } from './interfaces';
+
+import { shuffle, formatMoments } from './utils';
 import wayforwardSvg from './images/way-forward-svg';
-// import {set as setCookie} from 'es-cookie';
-// import * as Cookies from 'es-cookie';
+import wayforwardSvgMin from './images/way-forward-min-svg';
+
+import './marquee';
 
 @customElement('ia-anniversary-banner')
 export class IaAnniversaryBanner extends LitElement {
-  @property({ type: String }) baseHost = 'https://archive.org';
+  @property({ type: Object }) iaFiles: IAFile[] = [];
 
-  @property({ type: String }) centerImageUrl = '';
+  @property({ type: Object }) iaMD: IAMD = { directory: '' };
 
-  @property({ type: String }) centerImageHoverUrl = '';
+  @property({ type: Object }) moments: { [key: string]: TimelineMoment } = {};
+
+  @property({ type: Array }) shuffledMoments: TimelineMoment[] = [];
+
+  @property({ type: String }) landingURL = 'https://archive.org';
 
   @property({ type: String }) viewMode = 'open'; // open | closed
 
-  @property({ type: String }) text = '';
-
-  @property({ type: String }) centerImgAlt = '';
-
   @property({ type: Number }) hideBannerDays = 7;
+
+  updated(changed: any) {
+    if (changed.has('iaFiles') || changed.has('iaMD')) {
+      this.shuffleMoments();
+    }
+  }
+
+  shuffleMoments() {
+    const foundMoments = formatMoments(
+      this.iaFiles,
+      this.iaMD,
+      this.landingURL
+    );
+    const shuffledMoments = shuffle(foundMoments);
+    this.shuffledMoments = [...shuffledMoments];
+
+    this.dispatchEvent(
+      new CustomEvent('momentsShuffled', {
+        detail: { moments: this.shuffledMoments },
+      })
+    );
+  }
 
   private closeBanner() {
     this.viewMode = 'closed';
-    // fire analytic?
 
     if (this.hideBannerDays > 0) {
       (window as any)?.Cookies.set('anniv-banner', 'x', {
@@ -50,125 +75,117 @@ export class IaAnniversaryBanner extends LitElement {
       return nothing;
     }
 
-    /*
-            <bar-background>
-        <left-button>
-        <middle-image>
-        <text-area>
-        <right-button>
-        foo
-
-                  <span class="img-links">
-            <img alt=${this.centerImgAlt} src=${this.centerImageUrl}>
-          </span>
-          <span class="text-value">${this.text}</span>
-
-    */
     return html`
       <section class=${this.viewMode}>
-        <a class="left-anchor" href=${`${this.baseHost}/25thanniversary`} target="_blank" title="Visit out 25th Anniversary page">
-          ${wayforwardSvg}
-          <span class="sr-only">Internet Archive at 25</p>
+        <a
+          class="left-anchor"
+          href=${this.landingURL}
+          target="_blank"
+          title="Celebrate Internet Archive's 25th Anniversary"
+        >
+          ${wayforwardSvgMin} ${wayforwardSvg}
         </a>
-        <div class="dynamic-center center">
-
-        </div>
-
-        <a class="img-links right" href="https://archive.org" target="_blank" title="Visit out Wayforward machine">
-          Visit our Way forward machine.
-        </a>
+        <mar-quee .list=${this.shuffledMoments}></mar-quee>
         ${this.closeButton}
       </section>
-
     `;
   }
 
-  static styles = css`
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      border: 0;
-    }
-    section {
-      display: flex;
-      align-items: center;
-      padding: 25px;
-      color: var(--anniv-banner-text-color, #fff);
-      background-color: var(--anniv-banner-bg-color, blue);
-      padding: 0;
-      height: 0;
-    }
+  static get styles() {
+    const bannerHeight = css`var(--bannerHeight, 50px)`;
+    const marqueeWidth = css`var(--marquee-width, 150%)`;
+    const marqueeAnimation = css`var(--marquee-animation-s, 50s)`;
 
-    section.open {
-      height: 60px;
-    }
+    return css`
+      :host {
+        --bannerHeight: ${bannerHeight};
+        --marquee-height: ${bannerHeight};
+        --marquee-width: ${marqueeWidth};
+        --marquee-animation-s: ${marqueeAnimation};
+      }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0;
+      }
 
-    section > * {
-      display: inline-block;
-      border: 1px solid red;
-    }
+      section {
+        display: flex;
+        align-items: center;
+        padding: 25px;
+        color: var(--anniv-banner-text-color, #fff);
+        background-color: var(--anniv-banner-bg-color, blue);
+        padding: 0;
+        height: 0;
+      }
+      section.open {
+        height: ${bannerHeight};
+      }
 
-    img {
-      height: 60px;
-    }
+      section > * {
+        display: inline-block;
+        height: inherit;
+      }
 
-    .left-anchor {
-      max-width: 157px; // width of svg
-      border-right: 1px solid #fff;
-    }
+      .left-anchor {
+        max-width: 157px; /* width of svg */
+        display: flex;
+        align-items: center;
+        padding: 0 10px;
+      }
 
-    .text-value {
-      font-size: 24px;
-    }
+      mar-quee {
+        width: calc(100% - 187px);
+      }
 
-    .close-banner {
-      position: absolute;
-      right: 0;
-      top: 0;
-      background-color: transparent;
-      background-repeat: no-repeat;
-      border: none;
-      cursor: pointer;
-      overflow: hidden;
-      outline: none;
-      box-sizing: border-box;
-      width: 30px;
-      height: 30px;
-    }
-    .close-banner .fill-color {
-      fill: #fff;
-    }
-
-    @media only screen and (max-width: 700px) {
       .text-value {
+        font-size: 24px;
+      }
+
+      .close-banner {
+        background-color: Transparent;
+        background-repeat: no-repeat;
+        border: none;
+        cursor: pointer;
+        outline: none;
+        width: 30px;
+        box-sizing: border-box;
+      }
+      .close-banner .fill-color {
+        fill: #fff;
+      }
+
+      .wayforward-logo {
+        width: 157px;
+        height: 35px;
+      }
+
+      .wayforward-logo-min {
+        height: 32px;
+        width: 32px;
         display: none;
       }
-    }
-  `;
+
+      @media only screen and (max-width: 700px) {
+        mar-quee {
+          width: calc(100% - 82px);
+        }
+
+        .wayforward-logo-min {
+          display: block;
+        }
+
+        .wayforward-logo,
+        .svg-words,
+        .text-value {
+          display: none;
+        }
+      }
+    `;
+  }
 }
-
-/**
-
-    .left, right {
-      width: 15%;
-    }
-
-    .center {
-      width: 45%;
-    }
-
-    .img-links {
-      height: inherit;
-      position: relative;
-      display: inline-block;
-    }
-    .img-links > * {
-      width: 100%;
-    }
-
- */
