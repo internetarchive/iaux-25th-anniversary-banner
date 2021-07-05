@@ -32,42 +32,69 @@ export const shuffle = (list: any[]) => {
   return newArray;
 };
 
-/** takes an item's file list and c */
+/** takes an item and creates banner view model */
 export const formatMoments = (
   momentsRaw: IAFile[],
   iaMetadata: IAMD | any,
   landingURL: string
 ): TimelineMoment[] => {
   const foundMoments: any = {};
+  const foundSeparators: any = {};
 
-  momentsRaw?.forEach((file: { name: string }): void => {
-    const { name } = file;
-    const isRelevant = name.includes(`${iaMetadata.directory}/`);
-    if (!isRelevant) {
+  momentsRaw?.forEach((file: IAFile): void => {
+    const { name, format } = file;
+
+    const isTimelineImg = name.includes(`${iaMetadata.directory}/`);
+    const isSeparator = name.includes(`${iaMetadata.separator_dir}/`);
+
+    if (format !== 'PNG') {
       return;
     }
     const close = name?.match(/(?:\/\d*-)/g) || [];
-
-    if (!close.length) {
-      // whole problem, but not really
-    }
-
     const found = close[0];
     const order = found?.substring(1, found.length - 1);
-    let moment;
+    let moment = new Moment();
 
-    if (!foundMoments[order]) {
-      foundMoments[order] = new Moment();
-      moment = foundMoments[order];
-
-      const altText =
-        iaMetadata[`text_${order}`] || 'Internet Archive turns 25 milestone';
-      moment.altText = altText;
-
-      const link: string = iaMetadata[`link_${order}`] || landingURL;
-      moment.link = link;
+    if (isSeparator && !foundSeparators[order]) {
+      foundSeparators[order] = moment;
     }
-    moment = foundMoments[order];
+
+    if (isTimelineImg && !foundMoments[order]) {
+      foundMoments[order] = moment;
+    }
+
+    moment = isSeparator ? foundSeparators[order] : foundMoments[order];
+
+    if (!moment) {
+      return;
+    }
+
+    /* Find alt and link text */
+    let altText = 'Internet Archive turns 25 milestone';
+    let link = landingURL;
+    if (isSeparator) {
+      if (iaMetadata[`separator_text_${order}`]) {
+        altText = iaMetadata[`separator_text_${order}`];
+      }
+
+      if (iaMetadata[`separator_link_${order}`]) {
+        link = iaMetadata[`separator_link_${order}`];
+      }
+    }
+
+    if (isTimelineImg) {
+      if (iaMetadata[`text_${order}`]) {
+        altText = iaMetadata[`text_${order}`];
+      }
+
+      if (iaMetadata[`link_${order}`]) {
+        link = iaMetadata[`link_${order}`];
+      }
+    }
+    moment.altText = altText;
+    moment.link = link;
+    /* End alt and link text */
+
     if (name.match('-full.png')) {
       moment.desktopImg = `https://archive.org/cors/isa-9001599455299596/${name}`;
     }
@@ -78,7 +105,22 @@ export const formatMoments = (
   });
 
   const moments = Object.keys(foundMoments);
-  const catcher: TimelineMoment[] = [];
-  moments.forEach(m => catcher.push(foundMoments[m]));
-  return catcher;
+  const displayList: TimelineMoment[] = [];
+  let separatorUsed = 1;
+  moments.forEach((m, i) => {
+    const order = i + 1;
+    const isThird = order % 3 === 0;
+    displayList.push(foundMoments[m]);
+
+    if (isThird) {
+      /* add separator */
+      if (separatorUsed === 1) {
+        displayList.push(foundSeparators[`01`]);
+        separatorUsed = 0;
+      } else {
+        displayList.push(foundSeparators[`01`]);
+      }
+    }
+  });
+  return displayList;
 };

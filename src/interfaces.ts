@@ -14,4 +14,5 @@ export interface IAFile {
 
 export interface IAMD {
   directory: string;
+  separator_dir: string;
 }

@@ -26,7 +26,7 @@ export class IaAnniversaryBanner extends LitElement {
       const defaultUrl = `https://www-isa3.archive.org/25th-anniversary`;
       const { altText, desktopImg, mobileImg, link = defaultUrl } = moment;
       const content = html`
-        <a class="content-block" href=${link}>
+        <a class="content-block" href=${link} rel="nofollow">
           <img class="full" src=${desktopImg} alt=${altText} />
           <img class="min" src=${mobileImg} alt=${altText} />
         </a>

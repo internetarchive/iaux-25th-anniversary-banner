@@ -6,7 +6,10 @@ import './dev-tray';
 
 @customElement('app-root')
 export class AppRoot extends LitElement {
-  @property({ type: Object }) itemMD: IAMD | null = null;
+  @property({ type: Object }) itemMD: IAMD = {
+    directory: '',
+    separator_dir: '',
+  };
 
   @property({ type: Array }) itemFiles: any[] = [];
 
@@ -42,9 +45,7 @@ export class AppRoot extends LitElement {
     if (!detail.directory) {
       return;
     }
-
-    const md = { ...this.itemMD, directory: detail.directory };
-    this.itemMD = md;
+    this.itemMD = { ...this.itemMD, directory: detail.directory };
   }
 
   bannerHeightChange(e: CustomEvent) {

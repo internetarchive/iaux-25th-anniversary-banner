@@ -14,7 +14,7 @@ import './marquee';
 export class IaAnniversaryBanner extends LitElement {
   @property({ type: Object }) iaFiles: IAFile[] = [];
 
-  @property({ type: Object }) iaMD: IAMD = { directory: '' };
+  @property({ type: Object }) iaMD: IAMD = { directory: '', separator_dir: '' };
 
   @property({ type: Object }) moments: { [key: string]: TimelineMoment } = {};
 
@@ -38,6 +38,7 @@ export class IaAnniversaryBanner extends LitElement {
       this.iaMD,
       this.landingURL
     );
+
     const shuffledMoments = shuffle(foundMoments);
     this.shuffledMoments = [...shuffledMoments];
 
@@ -82,6 +83,7 @@ export class IaAnniversaryBanner extends LitElement {
           href=${this.landingURL}
           target="_blank"
           title="Celebrate Internet Archive's 25th Anniversary"
+          rel="nofollow"
         >
           ${wayforwardSvgMin} ${wayforwardSvg}
         </a>
@@ -103,16 +105,6 @@ export class IaAnniversaryBanner extends LitElement {
         --marquee-width: ${marqueeWidth};
         --marquee-animation-s: ${marqueeAnimation};
       }
-      .sr-only {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        border: 0;
-      }
 
       section {
         display: flex;
@@ -133,7 +125,7 @@ export class IaAnniversaryBanner extends LitElement {
       }
 
       .left-anchor {
-        max-width: 157px; /* width of svg */
+        max-width: 157px; /* width of button svg */
         display: flex;
         align-items: center;
         padding: 0 10px;
