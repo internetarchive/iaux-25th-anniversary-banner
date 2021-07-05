@@ -1,4 +1,5 @@
 import { html, css, LitElement, customElement, property } from 'lit-element';
+import { nothing } from 'lit-html';
 import { IAMD, TimelineMoment } from '../src/interfaces';
 import '../src/ia-anniversary-banner';
 import './dev-tray';
@@ -16,6 +17,8 @@ export class AppRoot extends LitElement {
   @property({ type: String }) bannerTiming = '';
 
   @property({ type: Array }) displayedMoments: TimelineMoment[] = [];
+
+  @property({ type: String }) devTray: 'enabled' | '' = 'enabled';
 
   firstUpdated() {
     this.getItem();
@@ -77,6 +80,17 @@ export class AppRoot extends LitElement {
     return allStyles;
   }
 
+  get devTrayView() {
+    return html`
+      <dev-tray
+        @directoryChange=${this.directoryChange}
+        @bannerHeightChange=${this.bannerHeightChange}
+        @bannerTimingChange=${this.bannerTimingChange}
+        .momentsDisplayed=${this.displayedMoments}
+      ></dev-tray>
+    `;
+  }
+
   render() {
     return html`
       <ia-anniversary-banner
@@ -87,12 +101,7 @@ export class AppRoot extends LitElement {
         landingURL="https://www-isa3.archive.org/anniversary"
       >
       </ia-anniversary-banner>
-      <dev-tray
-        @directoryChange=${this.directoryChange}
-        @bannerHeightChange=${this.bannerHeightChange}
-        @bannerTimingChange=${this.bannerTimingChange}
-        .momentsDisplayed=${this.displayedMoments}
-      ></dev-tray>
+      ${this.devTray === 'enabled' ? this.devTrayView : nothing}
     `;
   }
 

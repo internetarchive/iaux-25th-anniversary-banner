@@ -72,6 +72,7 @@ export class IaAnniversaryBanner extends LitElement {
       .photo-marquee ul {
         display: flex;
         margin: 0;
+        list-style: none;
       }
 
       @keyframes bannermove {
