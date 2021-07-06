@@ -76,6 +76,11 @@ export class IaAnniversaryBanner extends LitElement {
         list-style: none;
       }
 
+      .content-block {
+        overflow: hidden;
+        display: inline-block;
+      }
+
       @keyframes bannermove {
         0% {
           transform: translate(-20%, 0);

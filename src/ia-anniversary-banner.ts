@@ -96,6 +96,7 @@ export class IaAnniversaryBanner extends LitElement {
           ${wayforwardSvgMin} ${wayforwardSvg}
         </a>
         <mar-quee
+          class="marquee"
           .list=${this.shuffledMoments}
           .defaultLink=${this.landingURL}
         ></mar-quee>
@@ -117,9 +118,15 @@ export class IaAnniversaryBanner extends LitElement {
         --marquee-animation-s: ${marqueeAnimation};
       }
 
-      section {
+      section,
+      section * > * {
         display: flex;
         align-items: center;
+      }
+      section > * {
+        height: inherit;
+      }
+      section {
         padding: 25px;
         color: var(--anniv-banner-text-color, #fff);
         background-color: var(--anniv-banner-bg-color, blue);
@@ -130,11 +137,6 @@ export class IaAnniversaryBanner extends LitElement {
         height: ${bannerHeight};
       }
 
-      section > * {
-        display: inline-block;
-        height: inherit;
-      }
-
       .left-anchor {
         max-width: 157px; /* width of button svg */
         display: flex;
@@ -142,7 +144,7 @@ export class IaAnniversaryBanner extends LitElement {
         padding: 0 10px;
       }
 
-      mar-quee {
+      .marquee {
         width: calc(100% - 187px);
       }
 
@@ -156,8 +158,9 @@ export class IaAnniversaryBanner extends LitElement {
         border: none;
         cursor: pointer;
         outline: none;
-        width: 30px;
         box-sizing: border-box;
+        padding: 0 8px;
+        display: inline-block;
       }
       .close-banner .fill-color {
         fill: #fff;
@@ -166,8 +169,8 @@ export class IaAnniversaryBanner extends LitElement {
       .wayforward-logo {
         width: 157px;
         height: 35px;
+        padding-top: 2px;
       }
-
       .wayforward-logo-min {
         height: 32px;
         width: 32px;
@@ -175,7 +178,7 @@ export class IaAnniversaryBanner extends LitElement {
       }
 
       @media only screen and (max-width: 700px) {
-        mar-quee {
+        .marquee {
           width: calc(100% - 82px);
         }
 
