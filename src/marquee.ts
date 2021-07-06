@@ -16,17 +16,18 @@ export class IaAnniversaryBanner extends LitElement {
 
   @property({ type: String }) animationState: AnimationState = 'animate';
 
-  /** @inheritdoc */
-  firstUpdated() {
-    // todo: start prefetching images
-  }
+  @property({ type: String }) defaultLink = '';
 
   get contentBlocks() {
     const listView = this.list.map((moment: TimelineMoment, index) => {
-      const defaultUrl = `https://www-isa3.archive.org/25th-anniversary`;
-      const { altText, desktopImg, mobileImg, link = defaultUrl } = moment;
+      const {
+        altText,
+        desktopImg,
+        mobileImg,
+        link = this.defaultLink,
+      } = moment;
       const content = html`
-        <a class="content-block" href=${link} rel="nofollow">
+        <a class="content-block" href=${link} rel="nofollow" title=${altText}>
           <img class="full" src=${desktopImg} alt=${altText} />
           <img class="min" src=${mobileImg} alt=${altText} />
         </a>
@@ -98,10 +99,6 @@ export class IaAnniversaryBanner extends LitElement {
       @media only screen and (max-width: 600px) {
         img.full {
           display: none;
-        }
-        .photo-marquee {
-          animation: bannermove-min 10s linear infinite;
-          width: 150%;
         }
       }
       @media only screen and (min-width: 601px) {

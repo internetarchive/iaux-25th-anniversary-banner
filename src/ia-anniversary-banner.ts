@@ -95,7 +95,10 @@ export class IaAnniversaryBanner extends LitElement {
         >
           ${wayforwardSvgMin} ${wayforwardSvg}
         </a>
-        <mar-quee .list=${this.shuffledMoments}></mar-quee>
+        <mar-quee
+          .list=${this.shuffledMoments}
+          .defaultLink=${this.landingURL}
+        ></mar-quee>
         ${this.closeButton}
       </section>
     `;

@@ -86,13 +86,18 @@ export const formatMoments = (
     let altText = 'Internet Archive turns 25 milestone';
     let link = landingURL;
     if (isSeparator) {
-      if (iaMetadata[`separator_text_${order}`]) {
-        altText = iaMetadata[`separator_text_${order}`];
+      const separatorAlt = iaMetadata[`separator_text_${order}`];
+      if (separatorAlt) {
+        altText = separatorAlt;
       }
 
-      if (iaMetadata[`separator_link_${order}`]) {
-        link = iaMetadata[`separator_link_${order}`];
+      const separatorLink = iaMetadata[`separator_link_${order}`];
+      if (separatorLink) {
+        link = separatorLink;
       }
+
+      moment.link = link;
+      moment.altText = altText;
     }
 
     if (isTimelineImg) {
