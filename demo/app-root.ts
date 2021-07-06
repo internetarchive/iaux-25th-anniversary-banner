@@ -37,7 +37,6 @@ export class AppRoot extends LitElement {
 
     this.itemMD = itemMD.result;
     this.itemFiles = itemFiles.result;
-    this.directory = this.itemMD?.directory || '';
   }
 
   directoryChange(e: CustomEvent) {

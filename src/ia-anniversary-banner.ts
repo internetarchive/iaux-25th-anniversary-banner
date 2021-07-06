@@ -4,7 +4,7 @@ import CloseCircleIcon from '@internetarchive/icon-close-circle';
 
 import { IAFile, IAMD, TimelineMoment } from './interfaces';
 
-import { shuffle, formatMoments } from './utils';
+import { formatMoments } from './utils';
 import wayforwardSvg from './images/way-forward-svg';
 import wayforwardSvgMin from './images/way-forward-min-svg';
 
@@ -26,21 +26,29 @@ export class IaAnniversaryBanner extends LitElement {
 
   @property({ type: Number }) hideBannerDays = 7;
 
+  @property({ type: String }) directory = '';
+
   updated(changed: any) {
     if (changed.has('iaFiles') || changed.has('iaMD')) {
-      this.shuffleMoments();
+      this.shuffledMoments = [];
+      const { directory } = this.iaMD;
+      this.directory = directory;
+    }
+    if (changed.has('directory')) {
+      this.shuffleMoments(this.directory);
     }
   }
 
-  shuffleMoments() {
-    const foundMoments = formatMoments(
+  shuffleMoments(directory: string) {
+    const moments: TimelineMoment[] = formatMoments(
       this.iaFiles,
       this.iaMD,
-      this.landingURL
+      this.landingURL,
+      directory
     );
 
-    const shuffledMoments = shuffle(foundMoments);
-    this.shuffledMoments = [...shuffledMoments];
+    const newMoments = [...moments];
+    this.shuffledMoments = newMoments;
 
     this.dispatchEvent(
       new CustomEvent('momentsShuffled', {

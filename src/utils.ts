@@ -1,3 +1,4 @@
+// eslint-disable-next-line max-classes-per-file
 import { IAFile, IAMD, TimelineMoment } from './interfaces';
 
 export class Moment implements TimelineMoment {
@@ -32,41 +33,53 @@ export const shuffle = (list: any[]) => {
   return newArray;
 };
 
+let foundMoments: any = null;
+let foundSeparators: any = null;
 /** takes an item and creates banner view model */
 export const formatMoments = (
   momentsRaw: IAFile[],
   iaMetadata: IAMD | any,
-  landingURL: string
+  landingURL: string,
+  directoryToUse: string | undefined
 ): TimelineMoment[] => {
-  const foundMoments: any = {};
-  const foundSeparators: any = {};
-
+  foundMoments = {};
+  foundSeparators = {};
   momentsRaw?.forEach((file: IAFile): void => {
     const { name, format } = file;
-
-    const isTimelineImg = name.includes(`${iaMetadata.directory}/`);
-    const isSeparator = name.includes(`${iaMetadata.separator_dir}/`);
 
     if (format !== 'PNG') {
       return;
     }
+
     const close = name?.match(/(?:\/\d*-)/g) || [];
     const found = close[0];
-    const order = found?.substring(1, found.length - 1);
+    const order: string = found?.substring(1, found.length - 1);
+
+    const isTimelineImg = name.includes(`${directoryToUse}/`);
+    const isSeparator = name.includes(`${iaMetadata.separator_dir}/`);
+
+    const hasMoment = isSeparator
+      ? foundSeparators[order]
+      : foundMoments[order];
+
     let moment = new Moment();
 
-    if (isSeparator && !foundSeparators[order]) {
-      foundSeparators[order] = moment;
+    if (hasMoment) {
+      moment = hasMoment;
+      if (isSeparator) {
+        moment = foundSeparators[order];
+      } else {
+        moment = foundMoments[order];
+      }
     }
 
-    if (isTimelineImg && !foundMoments[order]) {
-      foundMoments[order] = moment;
+    if ((isTimelineImg || isSeparator) && name.match('-full.png')) {
+      const desktopImg = `https://archive.org/cors/isa-9001599455299596/${name}`;
+      moment.desktopImg = desktopImg;
     }
 
-    moment = isSeparator ? foundSeparators[order] : foundMoments[order];
-
-    if (!moment) {
-      return;
+    if ((isTimelineImg || isSeparator) && name.match('-min.png')) {
+      moment.mobileImg = `https://archive.org/cors/isa-9001599455299596/${name}`;
     }
 
     /* Find alt and link text */
@@ -83,28 +96,28 @@ export const formatMoments = (
     }
 
     if (isTimelineImg) {
-      if (iaMetadata[`text_${order}`]) {
-        altText = iaMetadata[`text_${order}`];
+      const setAltText = iaMetadata[`text_${order}`];
+      if (setAltText) {
+        altText = setAltText;
       }
 
-      if (iaMetadata[`link_${order}`]) {
-        link = iaMetadata[`link_${order}`];
+      const setLink = iaMetadata[`link_${order}`];
+      if (setLink) {
+        link = setLink;
       }
+      moment.link = link;
+      moment.altText = altText;
     }
-    moment.altText = altText;
-    moment.link = link;
+
     /* End alt and link text */
-
-    if (name.match('-full.png')) {
-      moment.desktopImg = `https://archive.org/cors/isa-9001599455299596/${name}`;
-    }
-
-    if (name.match('-min.png')) {
-      moment.mobileImg = `https://archive.org/cors/isa-9001599455299596/${name}`;
+    if (isSeparator) {
+      foundSeparators[order] = moment;
+    } else {
+      foundMoments[order] = moment;
     }
   });
 
-  const moments = Object.keys(foundMoments);
+  const moments = shuffle(Object.keys(foundMoments));
   const displayList: TimelineMoment[] = [];
   let separatorUsed = 1;
   moments.forEach((m, i) => {
@@ -122,5 +135,8 @@ export const formatMoments = (
       }
     }
   });
+  foundMoments = null;
+  foundSeparators = null;
+
   return displayList;
 };
