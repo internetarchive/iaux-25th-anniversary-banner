@@ -19,6 +19,8 @@ export class AppRoot extends LitElement {
 
   @property({ type: String }) bannerTiming = '';
 
+  @property({ type: String }) bannerColor = '';
+
   @property({ type: Array }) displayedMoments: TimelineMoment[] = [];
 
   @property({ type: String }) devTray: 'enabled' | '' = 'enabled';
@@ -61,6 +63,13 @@ export class AppRoot extends LitElement {
     }
   }
 
+  bannerColorChange(e: CustomEvent) {
+    const { detail } = e;
+    if (detail.bannerColor) {
+      this.bannerColor = detail.bannerColor;
+    }
+  }
+
   momentListUpdated(e: CustomEvent) {
     const { detail } = e;
     if (detail.moments) {
@@ -75,8 +84,15 @@ export class AppRoot extends LitElement {
     const bannerTiming = this.bannerTiming
       ? `--marquee-animation-s: ${this.bannerTiming}s`
       : null;
+    const bannerColor = this.bannerColor
+      ? `--anniv-banner-bg-color: #${this.bannerColor}`
+      : null;
 
-    const allStyles = [bannerHeight, bannerTiming].filter(x => !!x);
+    console.log('banenrStyle', bannerColor);
+
+    const allStyles = [bannerHeight, bannerTiming, bannerColor].filter(
+      x => !!x
+    );
     return allStyles;
   }
 
@@ -86,6 +102,7 @@ export class AppRoot extends LitElement {
         @directoryChange=${this.directoryChange}
         @bannerHeightChange=${this.bannerHeightChange}
         @bannerTimingChange=${this.bannerTimingChange}
+        @bannerColorChange=${this.bannerColorChange}
         .momentsDisplayed=${this.displayedMoments}
       ></dev-tray>
     `;
@@ -110,7 +127,6 @@ export class AppRoot extends LitElement {
       :host {
         display: block;
         --marquee-animation-s: var(--marquee-animation-s, 50s);
-        --marquee-width: var(--marquee-width, 150%);
       }
     `;
     return [main];

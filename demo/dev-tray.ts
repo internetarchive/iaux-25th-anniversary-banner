@@ -22,6 +22,18 @@ export class DevTray extends LitElement {
     );
   }
 
+  bannerColorSubmit(e: Event) {
+    e.preventDefault();
+    const form = e.target as any;
+    const bannerColor = form[0].value;
+
+    this.dispatchEvent(
+      new CustomEvent('bannerColorChange', {
+        detail: { bannerColor },
+      })
+    );
+  }
+
   bannerHeightSubmit(e: Event) {
     e.preventDefault();
     const form = e.target as any;
@@ -93,6 +105,7 @@ export class DevTray extends LitElement {
         <button @click=${this.toggleViewMode} class="toggle">
           ${buttonName}
         </button>
+        <p>add value + press enter</p>
         <div class="options">
           <form @submit=${this.directorySubmit}>
             <label
@@ -102,6 +115,10 @@ export class DevTray extends LitElement {
                 >available dirs</a
               >): <input type="text"
             /></label>
+          </form>
+          <br />
+          <form @submit=${this.bannerColorSubmit}>
+            <label>Banner Color in hex: <input type="text" /></label>
           </form>
           <br />
           <form @submit=${this.bannerHeightSubmit}>
