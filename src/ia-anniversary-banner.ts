@@ -16,7 +16,7 @@ export class IaAnniversaryBanner extends LitElement {
 
   @property({ type: Object }) iaMD: IAMD = { directory: '', separator_dir: '' };
 
-  @property({ type: Object }) moments: { [key: string]: TimelineMoment } = {};
+  @property({ type: Object }) moments: Record<string, TimelineMoment> = {};
 
   @property({ type: Array }) shuffledMoments: TimelineMoment[] = [];
 
