@@ -88,8 +88,6 @@ export class AppRoot extends LitElement {
       ? `--anniv-banner-bg-color: #${this.bannerColor}`
       : null;
 
-    console.log('banenrStyle', bannerColor);
-
     const allStyles = [bannerHeight, bannerTiming, bannerColor].filter(
       x => !!x
     );

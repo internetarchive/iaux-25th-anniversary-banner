@@ -1,28 +1,7 @@
 // eslint-disable-next-line max-classes-per-file
 import { IAFile, IAMD, TimelineMoment } from './interfaces';
 
-export class Moment implements TimelineMoment {
-  altText: string;
-
-  desktopImg: string;
-
-  mobileImg: string;
-
-  link: string | undefined;
-
-  constructor() {
-    this.altText = '';
-    this.desktopImg = '';
-    this.mobileImg = '';
-    this.link = undefined;
-  }
-}
-
 export const shuffle = (list: any[]) => {
-  if (!Array.isArray(list)) {
-    throw new TypeError(`Expected an Array, got ${typeof list} instead.`);
-  }
-
   const oldArray = [...list];
   let newArray: any[] = [];
 
@@ -62,7 +41,12 @@ export const formatMoments = (
       ? foundSeparators[order]
       : foundMoments[order];
 
-    let moment = new Moment();
+    let moment: TimelineMoment = {
+      altText: '',
+      desktopImg: '',
+      mobileImg: '',
+      link: undefined,
+    };
 
     if (hasMoment) {
       moment = hasMoment;

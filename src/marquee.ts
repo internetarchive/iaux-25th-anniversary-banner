@@ -10,7 +10,7 @@ import { TimelineMoment } from './interfaces';
 
 type AnimationState = 'animate' | 'stop';
 
-@customElement('mar-quee')
+@customElement('ia-anniversary-marquee')
 export class IaAnniversaryBanner extends LitElement {
   @property({ type: Array }) list: TimelineMoment[] = [];
 
@@ -27,7 +27,13 @@ export class IaAnniversaryBanner extends LitElement {
         link = this.defaultLink,
       } = moment;
       const content = html`
-        <a class="content-block" href=${link} rel="nofollow" title=${altText}>
+        <a
+          class="content-block"
+          href=${link}
+          rel="nofollow"
+          title=${altText}
+          data-event-click-tracking="Anniv25Banner|TimelineMoment"
+        >
           <img class="full" src=${desktopImg} alt=${altText} />
           <img class="min" src=${mobileImg} alt=${altText} />
         </a>

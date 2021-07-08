@@ -10,9 +10,14 @@ import wayforwardSvgMin from './images/way-forward-min-svg';
 
 import './marquee';
 
+enum BannerViewMode {
+  Open = 'open',
+  Closed = 'closed',
+}
+
 @customElement('ia-anniversary-banner')
 export class IaAnniversaryBanner extends LitElement {
-  @property({ type: Object }) iaFiles: IAFile[] = [];
+  @property({ type: Array }) iaFiles: IAFile[] = [];
 
   @property({ type: Object }) iaMD: IAMD = { directory: '', separator_dir: '' };
 
@@ -22,7 +27,7 @@ export class IaAnniversaryBanner extends LitElement {
 
   @property({ type: String }) landingURL = 'https://archive.org';
 
-  @property({ type: String }) viewMode = 'open'; // open | closed
+  @property({ type: String }) viewMode: BannerViewMode = BannerViewMode.Open;
 
   @property({ type: Number }) hideBannerDays = 7;
 
@@ -58,29 +63,22 @@ export class IaAnniversaryBanner extends LitElement {
   }
 
   private closeBanner() {
-    this.viewMode = 'closed';
-
-    if (this.hideBannerDays > 0) {
-      (window as any)?.Cookies.set('anniv-banner', 'x', {
-        path: '/',
-        expires: this.hideBannerDays,
-        domain: '.archive.org',
-      });
-    }
+    this.viewMode = BannerViewMode.Closed;
+    this.dispatchEvent(new Event('bannerClosed'));
   }
 
   get closeButton() {
     return html`<button
       class="close-banner"
-      title="close banner for the day"
-      @click=${() => this.closeBanner()}
+      title=${`Close anniversary banner for ${this.hideBannerDays} days.`}
+      @click=${this.closeBanner}
     >
       ${CloseCircleIcon}
     </button>`;
   }
 
   render() {
-    if (this.viewMode === 'closed') {
+    if (this.viewMode === BannerViewMode.Closed) {
       return nothing;
     }
 
@@ -92,14 +90,15 @@ export class IaAnniversaryBanner extends LitElement {
           target="_blank"
           title="Celebrate Internet Archive's 25th Anniversary"
           rel="nofollow"
+          data-event-click-tracking="Anniv25Banner|LeftAnchor"
         >
           ${wayforwardSvgMin} ${wayforwardSvg}
         </a>
-        <mar-quee
+        <ia-anniversary-marquee
           class="marquee"
           .list=${this.shuffledMoments}
           .defaultLink=${this.landingURL}
-        ></mar-quee>
+        ></ia-anniversary-marquee>
         ${this.closeButton}
       </section>
     `;
@@ -107,8 +106,9 @@ export class IaAnniversaryBanner extends LitElement {
 
   static get styles() {
     const bannerHeight = css`var(--bannerHeight, 50px)`;
-    const marqueeAnimation = css`var(--marquee-animation-s, 50s)`;
-    const bannerBg = css`var(--anniv-banner-bg-color, blue)`;
+    const marqueeAnimation = css`var(--marquee-animation-s, 100s)`;
+    const bannerBg = css`var(--anniv-banner-bg-color, #1F35FC)`;
+    const leftAnchorWidth = css`varea(--anniv-anchor-width, 157px)`; /* width of button svg */
     return css`
       :host {
         --bannerHeight: ${bannerHeight};
@@ -137,7 +137,7 @@ export class IaAnniversaryBanner extends LitElement {
       }
 
       .left-anchor {
-        max-width: 157px; /* width of button svg */
+        max-width: ${leftAnchorWidth};
         display: flex;
         align-items: center;
         padding: 0 10px;
