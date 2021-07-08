@@ -1,16 +1,20 @@
 import { html, css, LitElement, customElement, property } from 'lit-element';
 import { TimelineMoment } from '../src/interfaces';
 
+enum DevMenuViewMode {
+  Open = 'open',
+  Closed = 'closed',
+}
 @customElement('dev-tray')
 export class DevTray extends LitElement {
-  @property({ type: String }) viewMode: 'open' | 'closed' = 'open';
+  @property({ type: String }) viewMode: DevMenuViewMode = DevMenuViewMode.Open;
 
-  @property({ type: Object }) momentsDisplayed: TimelineMoment[] = [];
+  @property({ type: Array }) momentsDisplayed: TimelineMoment[] = [];
 
   directorySubmit(e: Event) {
     e.preventDefault();
-    const form = e.target as any;
-    const directory = form[0].value;
+    const form = e.target as HTMLFormElement;
+    const directory = (form[0] as HTMLInputElement).value;
     if (!directory) {
       return;
     }
@@ -24,8 +28,8 @@ export class DevTray extends LitElement {
 
   bannerColorSubmit(e: Event) {
     e.preventDefault();
-    const form = e.target as any;
-    const bannerColor = form[0].value;
+    const form = e.target as HTMLFormElement;
+    const bannerColor = (form[0] as HTMLInputElement).value;
 
     this.dispatchEvent(
       new CustomEvent('bannerColorChange', {
@@ -36,8 +40,8 @@ export class DevTray extends LitElement {
 
   bannerHeightSubmit(e: Event) {
     e.preventDefault();
-    const form = e.target as any;
-    const bannerHeight = form[0].value;
+    const form = e.target as HTMLFormElement;
+    const bannerHeight = (form[0] as HTMLInputElement).value;
     if (!parseInt(bannerHeight, 10)) {
       return;
     }
@@ -51,8 +55,8 @@ export class DevTray extends LitElement {
 
   bannerTimingSubmit(e: Event) {
     e.preventDefault();
-    const form = e.target as any;
-    const bannerTiming = form[0].value;
+    const form = e.target as HTMLFormElement;
+    const bannerTiming = (form[0] as HTMLInputElement).value;
     if (!parseInt(bannerTiming, 10)) {
       return;
     }
@@ -65,10 +69,10 @@ export class DevTray extends LitElement {
   }
 
   toggleViewMode() {
-    if (this.viewMode === 'open') {
-      this.viewMode = 'closed';
+    if (this.viewMode === DevMenuViewMode.Open) {
+      this.viewMode = DevMenuViewMode.Closed;
     } else {
-      this.viewMode = 'open';
+      this.viewMode = DevMenuViewMode.Open;
     }
   }
 
@@ -99,7 +103,9 @@ export class DevTray extends LitElement {
 
   render() {
     const buttonName =
-      this.viewMode === 'open' ? 'Close banner options' : 'Open banner options';
+      this.viewMode === DevMenuViewMode.Open
+        ? 'Close banner options'
+        : 'Open banner options';
     return html`
       <div class=${this.viewMode}>
         <button @click=${this.toggleViewMode} class="toggle">
