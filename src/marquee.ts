@@ -46,7 +46,6 @@ export class IaAnniversaryBanner extends LitElement {
 
   static get styles() {
     const marqueeAnimation = css`var(--marquee-animation-s, 50s)`;
-    const marqueeWidth = css`var(--marquee-width, 150%)`;
     const marqueeHeight = css`var(--marquee-height, 50px)`;
 
     return css`
@@ -61,8 +60,9 @@ export class IaAnniversaryBanner extends LitElement {
       }
 
       .photo-marquee {
+        height: inherit;
+        width: 100%;
         display: flex;
-        width: ${marqueeWidth};
         animation: bannermove ${marqueeAnimation} linear infinite;
       }
 
@@ -74,6 +74,7 @@ export class IaAnniversaryBanner extends LitElement {
         display: flex;
         margin: 0;
         list-style: none;
+        padding: 0;
       }
 
       .content-block {
@@ -98,6 +99,14 @@ export class IaAnniversaryBanner extends LitElement {
 
         100% {
           transform: translate(-120%, 0);
+        }
+      }
+
+      @media (prefers-reduced-motion) {
+        .photo-marquee {
+          overflow-x: auto;
+          overflow-y: hidden;
+          animation: none;
         }
       }
 

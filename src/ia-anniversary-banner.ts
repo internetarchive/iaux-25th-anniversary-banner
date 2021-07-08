@@ -107,15 +107,14 @@ export class IaAnniversaryBanner extends LitElement {
 
   static get styles() {
     const bannerHeight = css`var(--bannerHeight, 50px)`;
-    const marqueeWidth = css`var(--marquee-width, 150%)`;
     const marqueeAnimation = css`var(--marquee-animation-s, 50s)`;
-
+    const bannerBg = css`var(--anniv-banner-bg-color, blue)`;
     return css`
       :host {
         --bannerHeight: ${bannerHeight};
         --marquee-height: ${bannerHeight};
-        --marquee-width: ${marqueeWidth};
         --marquee-animation-s: ${marqueeAnimation};
+        --banner-color: ${bannerBg};
       }
 
       section,
@@ -129,7 +128,7 @@ export class IaAnniversaryBanner extends LitElement {
       section {
         padding: 25px;
         color: var(--anniv-banner-text-color, #fff);
-        background-color: var(--anniv-banner-bg-color, blue);
+        background-color: var(--banner-color);
         padding: 0;
         height: 0;
       }
