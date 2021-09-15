@@ -1,5 +1,6 @@
 import { LitElement, customElement, html, css, property } from 'lit-element';
 import { nothing } from 'lit-html';
+import CloseCircleIcon from '@internetarchive/icon-close-circle';
 import baseLayer from './svgs/base-layer';
 import text1 from './svgs/text-1';
 import text2 from './svgs/text-2';
@@ -7,6 +8,11 @@ import text2 from './svgs/text-2';
 enum TextDisplay {
   main = 'main',
   cta = 'cta',
+}
+
+enum BannerViewMode {
+  Open = 'open',
+  Closed = 'closed',
 }
 @customElement('ia-anniversary-banner')
 export class IaAnniversaryBanner extends LitElement {
@@ -21,6 +27,10 @@ export class IaAnniversaryBanner extends LitElement {
   @property({ type: Boolean }) intervalStarted: boolean = false;
 
   @property({ type: String }) toggleState: 'toggling' | 'stop' = 'stop';
+
+  @property({ type: Number }) hideBannerDays = 7;
+
+  @property({ type: String }) viewMode: BannerViewMode = BannerViewMode.Open;
 
   updated(changed: { has: (arg0: string) => any }) {
     if (changed.has('animationTimingSeconds') || changed.has('textShown')) {
@@ -77,6 +87,10 @@ export class IaAnniversaryBanner extends LitElement {
   }
 
   render() {
+    if (this.viewMode === BannerViewMode.Closed) {
+      return nothing;
+    }
+
     const link = 'https://anniversary.archive.org';
     return html`
       <section>
@@ -98,8 +112,20 @@ export class IaAnniversaryBanner extends LitElement {
             </figure>
           </div>
         </a>
+        <button
+          class="close-banner"
+          title=${`Close anniversary banner for ${this.hideBannerDays} days.`}
+          @click=${this.closeBanner}
+        >
+          ${CloseCircleIcon}
+        </button>
       </section>
     `;
+  }
+
+  private closeBanner() {
+    this.viewMode = BannerViewMode.Closed;
+    this.dispatchEvent(new Event('bannerClosed'));
   }
 
   static get styles() {
@@ -111,11 +137,15 @@ export class IaAnniversaryBanner extends LitElement {
     const height = css`var(--annivBannerHeight, ${ultraWideHeight})`;
     return css`
       section,
-      section > * {
+      section > a,
+      section .text svg {
         display: block;
-        position: relative;
         width: 100%;
         height: ${height};
+      }
+
+      section {
+        position: relative;
       }
 
       section .text {
@@ -156,6 +186,32 @@ export class IaAnniversaryBanner extends LitElement {
       svg {
         width: 100%;
         height: 100%;
+      }
+
+      .close-banner {
+        background-color: Transparent;
+        background-repeat: no-repeat;
+        border: none;
+        cursor: pointer;
+        outline: none;
+        box-sizing: border-box;
+        padding: 0 8px;
+        display: inline-block;
+        overflow: hidden;
+        height: 30px;
+        width: 30px;
+        position: absolute;
+        top: 0;
+        right: 0;
+      }
+      .close-banner svg {
+        height: 15px;
+        width: 15px;
+        display: block;
+        margin: auto;
+      }
+      .close-banner .fill-color {
+        fill: #fff;
       }
 
       @media only screen and (max-width: 760px) {
