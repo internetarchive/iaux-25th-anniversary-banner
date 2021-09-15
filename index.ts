@@ -1,1 +1,1 @@
-export { IaAnniversaryBanner } from './src/ia-anniversary-banner';
+export { IaAnniversaryBanner } from './src/ia-anniversary-banner-dissolve';

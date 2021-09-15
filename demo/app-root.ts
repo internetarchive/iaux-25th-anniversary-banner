@@ -1,7 +1,7 @@
 import { html, css, LitElement, customElement, property } from 'lit-element';
 import { nothing } from 'lit-html';
 import { IAMD, TimelineMoment } from '../src/interfaces';
-import '../src/ia-anniversary-banner';
+import '../src/ia-anniversary-banner-dissolve';
 import './dev-tray';
 
 @customElement('app-root')
@@ -120,7 +120,7 @@ export class AppRoot extends LitElement {
       <ia-anniversary-banner
         .iaFiles=${this.itemFiles}
         .iaMD=${this.itemMD}
-        style=${this.bannerStyle}
+        .style=${this.bannerStyle}
         @momentsShuffled=${this.momentListUpdated}
         landingURL="https://www-isa3.archive.org/anniversary"
       >
@@ -133,7 +133,9 @@ export class AppRoot extends LitElement {
     const main = css`
       :host {
         display: block;
-        --marquee-animation-s: var(--marquee-animation-s, 50s);
+        position: relative;
+        width: 100%;
+        height: auto;
       }
     `;
     return [main];
