@@ -49,6 +49,14 @@ export class AppRoot extends LitElement {
     this.itemMD = { ...this.itemMD, directory: detail.directory };
   }
 
+  separatorDirectoryChange(e: CustomEvent) {
+    const { detail } = e;
+    if (!detail.separator_dir) {
+      return;
+    }
+    this.itemMD = { ...this.itemMD, separator_dir: detail.separator_dir };
+  }
+
   bannerHeightChange(e: CustomEvent) {
     const { detail } = e;
     if (detail.bannerHeight) {
@@ -98,6 +106,7 @@ export class AppRoot extends LitElement {
     return html`
       <dev-tray
         @directoryChange=${this.directoryChange}
+        @separatorDirChange=${this.separatorDirectoryChange}
         @bannerHeightChange=${this.bannerHeightChange}
         @bannerTimingChange=${this.bannerTimingChange}
         @bannerColorChange=${this.bannerColorChange}

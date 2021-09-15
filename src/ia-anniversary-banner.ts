@@ -107,7 +107,7 @@ export class IaAnniversaryBanner extends LitElement {
   static get styles() {
     const bannerHeight = css`var(--bannerHeight, 50px)`;
     const marqueeAnimation = css`var(--marquee-animation-s, 100s)`;
-    const bannerBg = css`var(--anniv-banner-bg-color, #1F35FC)`;
+    const bannerBg = css`var(--anniv-banner-bg-color, #1812d6)`;
     const leftAnchorWidth = css`varea(--anniv-anchor-width, 157px)`; /* width of button svg */
     return css`
       :host {

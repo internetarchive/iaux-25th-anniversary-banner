@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import { html, css, LitElement, customElement, property } from 'lit-element';
 import { TimelineMoment } from '../src/interfaces';
 
@@ -22,6 +23,21 @@ export class DevTray extends LitElement {
     this.dispatchEvent(
       new CustomEvent('directoryChange', {
         detail: { directory },
+      })
+    );
+  }
+
+  separatorDirSubmit(e: Event) {
+    e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    const separator_dir = (form[0] as HTMLInputElement).value;
+    if (!separator_dir) {
+      return;
+    }
+
+    this.dispatchEvent(
+      new CustomEvent('separatorDirChange', {
+        detail: { separator_dir },
       })
     );
   }
@@ -116,6 +132,16 @@ export class DevTray extends LitElement {
           <form @submit=${this.directorySubmit}>
             <label
               >Directory (<a
+                href="https://archive.org/download/isa-9001599455299596"
+                target="_blank"
+                >available dirs</a
+              >): <input type="text"
+            /></label>
+          </form>
+          <br />
+          <form @submit=${this.directorySubmit}>
+            <label
+              >Separator directory (<a
                 href="https://archive.org/download/isa-9001599455299596"
                 target="_blank"
                 >available dirs</a
