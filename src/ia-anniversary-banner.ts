@@ -105,13 +105,13 @@
 //   }
 
 //   static get styles() {
-//     const bannerHeight = css`var(--bannerHeight, 50px)`;
+//     const bannerHeight = css`var(--annivBannerHeight, 50px)`;
 //     const marqueeAnimation = css`var(--marquee-animation-s, 100s)`;
 //     const bannerBg = css`var(--anniv-banner-bg-color, #1812d6)`;
 //     const leftAnchorWidth = css`varea(--anniv-anchor-width, 157px)`; /* width of button svg */
 //     return css`
 //       :host {
-//         --bannerHeight: ${bannerHeight};
+//         --annivBannerHeight: ${bannerHeight};
 //         --marquee-height: ${bannerHeight};
 //         --marquee-animation-s: ${marqueeAnimation};
 //         --banner-color: ${bannerBg};

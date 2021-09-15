@@ -87,7 +87,7 @@ export class AppRoot extends LitElement {
 
   get bannerStyle() {
     const bannerHeight = this.bannerHeight
-      ? `--bannerHeight: ${this.bannerHeight}px`
+      ? `--annivBannerHeight: ${this.bannerHeight}px`
       : null;
     const bannerTiming = this.bannerTiming
       ? `--marquee-animation-s: ${this.bannerTiming}s`
