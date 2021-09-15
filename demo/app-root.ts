@@ -1,5 +1,4 @@
 import { html, css, LitElement, customElement, property } from 'lit-element';
-import { nothing } from 'lit-html';
 import { IAMD, TimelineMoment } from '../src/interfaces';
 import '../src/ia-anniversary-banner-dissolve';
 import './dev-tray';
@@ -125,7 +124,6 @@ export class AppRoot extends LitElement {
         landingURL="https://www-isa3.archive.org/anniversary"
       >
       </ia-anniversary-banner>
-      ${this.devTray === 'enabled' ? this.devTrayView : nothing}
     `;
   }
 

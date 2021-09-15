@@ -5,6 +5,10 @@ import baseLayer from './svgs/base-layer';
 import text1 from './svgs/text-1';
 import text2 from './svgs/text-2';
 
+import mobileBaseLayer from './svgs/mobile/base-layer';
+import mobileText1 from './svgs/mobile/text-1';
+import mobileText2 from './svgs/mobile/text-2';
+
 enum TextDisplay {
   main = 'main',
   cta = 'cta',
@@ -16,7 +20,7 @@ enum BannerViewMode {
 }
 @customElement('ia-anniversary-banner')
 export class IaAnniversaryBanner extends LitElement {
-  @property({ type: Number }) animationTimingSeconds: number = 5;
+  @property({ type: Number }) toggleTextSeconds: number = 3;
 
   @property({ type: String }) textShown: 'main' | 'cta' = 'main';
 
@@ -33,7 +37,7 @@ export class IaAnniversaryBanner extends LitElement {
   @property({ type: String }) viewMode: BannerViewMode = BannerViewMode.Open;
 
   updated(changed: { has: (arg0: string) => any }) {
-    if (changed.has('animationTimingSeconds') || changed.has('textShown')) {
+    if (changed.has('toggleTextSeconds') || changed.has('textShown')) {
       this.startTextSwap();
     }
   }
@@ -53,7 +57,7 @@ export class IaAnniversaryBanner extends LitElement {
     this.intervalStarted = !this.intervalStarted;
     this.interval = setInterval(
       () => this.toggleText(),
-      this.animationTimingSeconds * 1000
+      this.toggleTextSeconds * 1000
     );
   }
 
@@ -86,6 +90,30 @@ export class IaAnniversaryBanner extends LitElement {
     return 'hide';
   }
 
+  get mobileBanner() {
+    return html`
+      <div class="mobile-banner">
+        <div class="base">${mobileBaseLayer}</div>
+        <div class="text main ${this.showMainCss}">${mobileText1}</div>
+        ${this.intervalStarted
+          ? html`<div class="text cta ${this.showCtaCss}">${mobileText2}</div>`
+          : nothing}
+      </div>
+    `;
+  }
+
+  get desktopBanner() {
+    return html`
+      <div class="desktop-banner">
+        <div class="base">${baseLayer}</div>
+        <div class="text main ${this.showMainCss}">${text1}</div>
+        ${this.intervalStarted
+          ? html`<div class="text cta ${this.showCtaCss}">${text2}</div>`
+          : nothing}
+      </div>
+    `;
+  }
+
   render() {
     if (this.viewMode === BannerViewMode.Closed) {
       return nothing;
@@ -101,11 +129,7 @@ export class IaAnniversaryBanner extends LitElement {
         >
           <div>
             <figure>
-              ${baseLayer}
-              <div class="text main ${this.showMainCss}">${text1}</div>
-              ${this.intervalStarted
-                ? html`<div class="text cta ${this.showCtaCss}">${text2}</div>`
-                : nothing}
+              ${this.mobileBanner} ${this.desktopBanner}
               <figcaption>
                 Homepage banner celebrating 25 years of the Internet Archive.
               </figcaption>
@@ -129,27 +153,19 @@ export class IaAnniversaryBanner extends LitElement {
   }
 
   static get styles() {
-    const mobileHeight = css`var(--annivBannerMobileHeight, 80px)`;
+    const mobileHeight = css`var(--annivBannerMobileHeight, 52px)`;
     const tabletHeight = css`var(--annivBannerTabletHeight, 100px)`;
-    const desktopHeight = css`var(--annivBannerDesktopHeight, 130px)`;
-    const ultraWideHeight = css`var(--annivBannerUltraWideHeight, 180px)`;
-
-    const height = css`var(--annivBannerHeight, ${ultraWideHeight})`;
+    const desktopHeight = css`var(--annivBannerDesktopHeight, 140px)`;
+    const height = css`var(--annivBannerHeight, ${desktopHeight})`;
     return css`
-      section,
-      section > a,
-      section .text svg {
-        display: block;
-        width: 100%;
-        height: ${height};
-      }
-
       section {
         position: relative;
+        height: ${height};
+        overflow: hidden;
       }
 
       section .text {
-        transition: opacity var(--annivBannerTxSeconds, 3s);
+        transition: opacity var(--annivBannerTxSeconds, 0.25s);
       }
 
       section .text.hide {
@@ -161,31 +177,9 @@ export class IaAnniversaryBanner extends LitElement {
       }
 
       a {
-        background-image: url('https://archive.org/download/ia-25-home-square-optimized/ia-25-banner-bg.png');
-        background-repeat: no-repeat;
-        background-size: 100% 100%;
-      }
-
-      figcaption {
-        height: 1px;
+        display: block;
         overflow: hidden;
-        width: 1px;
-        position: relative;
-      }
-
-      figure,
-      svg {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        margin: 0;
-      }
-
-      svg {
-        width: 100%;
-        height: 100%;
+        height: inherit;
       }
 
       .close-banner {
@@ -214,9 +208,55 @@ export class IaAnniversaryBanner extends LitElement {
         fill: #fff;
       }
 
-      @media only screen and (max-width: 760px) {
+      figure {
+        margin: 0;
+        background-image: url('https://archive.org/download/ia-25-home-square-optimized/ia-25-banner-bg.png');
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+        height: ${height};
+      }
+
+      figcaption {
+        height: 1px;
+        overflow: hidden;
+        width: 1px;
+        position: relative;
+      }
+
+      .base,
+      .text {
+        position: absolute;
+        right: 0;
+        left: 0;
+        top: 0;
+        bottom: 0;
+      }
+
+      .base svg,
+      .text svg {
+        height: 100%;
+        width: 100%;
+      }
+
+      .mobile-banner {
+        display: none;
+      }
+
+      @media screen and (max-width: 760px) {
         :host {
           --annivBannerHeight: ${mobileHeight};
+        }
+
+        .mobile-banner {
+          display: block;
+        }
+
+        .desktop-banner {
+          display: none;
+        }
+
+        figure {
+          background-image: url('https://archive.org/download/ia-25-home-square-optimized/ia-anniv-banner-bg-mobile.png');
         }
       }
 
@@ -226,15 +266,9 @@ export class IaAnniversaryBanner extends LitElement {
         }
       }
 
-      @media only screen and (min-width: 1001px) and (max-width: 1439px) {
+      @media only screen and (min-width: 1001px) {
         :host {
           --annivBannerHeight: ${desktopHeight};
-        }
-      }
-
-      @media only screen and (min-width: 1440px) {
-        :host {
-          --annivBannerHeight: ${ultraWideHeight};
         }
       }
     `;
