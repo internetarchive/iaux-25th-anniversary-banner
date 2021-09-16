@@ -36,6 +36,10 @@ export class IaAnniversaryBanner extends LitElement {
 
   @property({ type: String }) viewMode: BannerViewMode = BannerViewMode.Open;
 
+  disconnectedCallback() {
+    this.clearInterval();
+  }
+
   updated(changed: { has: (arg0: string) => any }) {
     if (changed.has('toggleTextSeconds') || changed.has('textShown')) {
       this.startTextSwap();
@@ -150,6 +154,7 @@ export class IaAnniversaryBanner extends LitElement {
   private closeBanner() {
     this.viewMode = BannerViewMode.Closed;
     this.dispatchEvent(new Event('bannerClosed'));
+    this.clearInterval();
   }
 
   static get styles() {
