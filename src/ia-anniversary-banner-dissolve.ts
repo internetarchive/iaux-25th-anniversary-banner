@@ -159,9 +159,7 @@ export class IaAnniversaryBanner extends LitElement {
 
   static get styles() {
     const mobileHeight = css`var(--annivBannerMobileHeight, 52px)`;
-    const tabletHeight = css`var(--annivBannerTabletHeight, 100px)`;
-    const desktopHeight = css`var(--annivBannerDesktopHeight, 140px)`;
-    const height = css`var(--annivBannerHeight, ${desktopHeight})`;
+    const height = css`var(--annivBannerHeight, 90px)`;
     return css`
       section {
         position: relative;
@@ -247,7 +245,7 @@ export class IaAnniversaryBanner extends LitElement {
         display: none;
       }
 
-      @media screen and (max-width: 760px) {
+      @media screen and (max-width: 767px) {
         :host {
           --annivBannerHeight: ${mobileHeight};
         }
@@ -262,18 +260,6 @@ export class IaAnniversaryBanner extends LitElement {
 
         figure {
           background-image: url('https://archive.org/download/ia-25-home-square-optimized/ia-anniv-banner-bg-mobile.png');
-        }
-      }
-
-      @media only screen and (min-width: 761px) and (max-width: 1000px) {
-        :host {
-          --annivBannerHeight: ${tabletHeight};
-        }
-      }
-
-      @media only screen and (min-width: 1001px) {
-        :host {
-          --annivBannerHeight: ${desktopHeight};
         }
       }
     `;
