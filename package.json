@@ -1,7 +1,7 @@
 {
-  "name": "@internetarchive/your-webcomponent",
-  "version": "0.0.0",
-  "description": "The Internet Archive Typescript WebComponent template. It is based on the @open-wc template.",
+  "name": "@internetarchive/ia-25th-anniversary-banner",
+  "version": "0.0.0-dissolve5",
+  "description": "25th anniversary commemoration banner",
   "author": "Internet Archive",
   "license": "AGPL-3.0-only",
   "main": "dist/index.js",
@@ -17,11 +17,12 @@
     "lint": "eslint --ext .ts,.html . --ignore-path .gitignore && prettier \"**/*.ts\" --check --ignore-path .gitignore",
     "format": "eslint --ext .ts,.html . --fix --ignore-path .gitignore && prettier \"**/*.ts\" --write --ignore-path .gitignore",
     "circular": "madge --circular --extensions ts .",
-    "test": "tsc && yarn run lint && yarn run circular && wtr --coverage",
+    "test": "",
     "test:watch": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wtr --watch\""
   },
   "dependencies": {
-    "lit-element": "^2.2.1",
+    "@internetarchive/icon-close-circle": "^1.0.1",
+    "lit-element": "^2.5.1",
     "lit-html": "^1.1.2"
   },
   "devDependencies": {
@@ -52,6 +53,9 @@
       "@typescript-eslint"
     ],
     "rules": {
+      "no-shadow": "off",
+      "@typescript-eslint/no-shadow": ["error"],
+      "class-methods-use-this": "off",
       "no-unused-vars": "off",
       "@typescript-eslint/no-unused-vars": [
         "error"

@@ -1,21 +1,21 @@
 import { html, css, LitElement, customElement } from 'lit-element';
-import '../src/your-webcomponent';
+import '../src/ia-anniversary-banner-dissolve';
 
 @customElement('app-root')
 export class AppRoot extends LitElement {
   render() {
-    return html`
-      <your-webcomponent title="Hello">
-        <div slot="my-slot">Some LightDOM Content</div>
-      </your-webcomponent>
-    `;
+    return html` <ia-anniversary-banner></ia-anniversary-banner> `;
   }
 
-  static styles = css`
-    :host {
-      display: block;
-      padding: 25px;
-      color: var(--your-webcomponent-text-color, #000);
-    }
-  `;
+  static get styles() {
+    const main = css`
+      :host {
+        display: block;
+        position: relative;
+        width: 100%;
+        height: auto;
+      }
+    `;
+    return [main];
+  }
 }

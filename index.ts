@@ -1,1 +1,1 @@
-export { YourWebComponent } from './src/your-webcomponent';
+export { IaAnniversaryBanner } from './src/ia-anniversary-banner-dissolve';
