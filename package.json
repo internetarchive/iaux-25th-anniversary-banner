@@ -1,6 +1,6 @@
 {
   "name": "@internetarchive/ia-25th-anniversary-banner",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "25th anniversary commemoration banner",
   "author": "Internet Archive",
   "license": "AGPL-3.0-only",
@@ -17,7 +17,7 @@
     "lint": "eslint --ext .ts,.html . --ignore-path .gitignore && prettier \"**/*.ts\" --check --ignore-path .gitignore",
     "format": "eslint --ext .ts,.html . --fix --ignore-path .gitignore && prettier \"**/*.ts\" --write --ignore-path .gitignore",
     "circular": "madge --circular --extensions ts .",
-    "test": "",
+    "test": "tsc && yarn run lint && yarn run circular && wtr --coverage",
     "test:watch": "tsc && concurrently -k -r \"tsc --watch --preserveWatchOutput\" \"wtr --watch\""
   },
   "dependencies": {

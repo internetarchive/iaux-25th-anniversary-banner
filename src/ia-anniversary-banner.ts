@@ -28,13 +28,11 @@ export class IaAnniversaryBanner extends LitElement {
     typeof setTimeout
   > | null = null;
 
-  @property({ type: Boolean }) intervalStarted: boolean = false;
-
-  @property({ type: String }) toggleState: 'toggling' | 'stop' = 'stop';
-
-  @property({ type: Number }) hideBannerDays = 7;
+  @property({ type: Number }) hideBannerDays = 3;
 
   @property({ type: String }) viewMode: BannerViewMode = BannerViewMode.Open;
+
+  @property({ type: Boolean }) intervalStarted: boolean = false;
 
   disconnectedCallback() {
     this.clearInterval();
@@ -118,6 +116,10 @@ export class IaAnniversaryBanner extends LitElement {
     `;
   }
 
+  bannerClick() {
+    this.dispatchEvent(new Event('bannerClick'));
+  }
+
   render() {
     if (this.viewMode === BannerViewMode.Closed) {
       return nothing;
@@ -129,7 +131,7 @@ export class IaAnniversaryBanner extends LitElement {
         <a
           href=${link}
           alt="Come celebrate 25 years with us."
-          data-event-click-tracking="Anniv25Banner|Homepage"
+          @click=${this.bannerClick}
         >
           <div>
             <figure>
@@ -160,6 +162,7 @@ export class IaAnniversaryBanner extends LitElement {
   static get styles() {
     const mobileHeight = css`var(--annivBannerMobileHeight, 52px)`;
     const height = css`var(--annivBannerHeight, 90px)`;
+    const closeButtonFill = css`var(--annivBannerCloseButtonFill, #222)`;
     return css`
       section {
         position: relative;
@@ -208,7 +211,7 @@ export class IaAnniversaryBanner extends LitElement {
         margin: auto;
       }
       .close-banner .fill-color {
-        fill: #fff;
+        fill: ${closeButtonFill};
       }
 
       figure {
