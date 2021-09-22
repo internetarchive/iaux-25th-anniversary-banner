@@ -1,5 +1,5 @@
 import { html, css, LitElement, customElement } from 'lit-element';
-import '../src/ia-anniversary-banner-dissolve';
+import '../src/ia-anniversary-banner';
 
 @customElement('app-root')
 export class AppRoot extends LitElement {
