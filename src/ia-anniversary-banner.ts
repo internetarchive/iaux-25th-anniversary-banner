@@ -133,7 +133,6 @@ export class IaAnniversaryBanner extends LitElement {
         <a
           href=${link}
           alt="Come celebrate 25 years with us."
-          data-event-click-tracking="Anniv25Banner|Homepage"
           @click=${this.bannerClick}
         >
           <div>
