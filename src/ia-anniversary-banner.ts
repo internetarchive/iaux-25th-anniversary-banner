@@ -160,6 +160,7 @@ export class IaAnniversaryBanner extends LitElement {
   static get styles() {
     const mobileHeight = css`var(--annivBannerMobileHeight, 52px)`;
     const height = css`var(--annivBannerHeight, 90px)`;
+    const closeButtonFill = css`var(--annivBannerCloseButtonFill, #222)`;
     return css`
       section {
         position: relative;
@@ -208,7 +209,7 @@ export class IaAnniversaryBanner extends LitElement {
         margin: auto;
       }
       .close-banner .fill-color {
-        fill: #fff;
+        fill: ${closeButtonFill};
       }
 
       figure {
