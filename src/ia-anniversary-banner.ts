@@ -28,13 +28,11 @@ export class IaAnniversaryBanner extends LitElement {
     typeof setTimeout
   > | null = null;
 
-  @property({ type: Boolean }) intervalStarted: boolean = false;
-
-  @property({ type: String }) toggleState: 'toggling' | 'stop' = 'stop';
-
-  @property({ type: Number }) hideBannerDays = 7;
+  @property({ type: Number }) hideBannerDays = 3;
 
   @property({ type: String }) viewMode: BannerViewMode = BannerViewMode.Open;
+
+  @property({ type: Boolean }) intervalStarted: boolean = false;
 
   disconnectedCallback() {
     this.clearInterval();
