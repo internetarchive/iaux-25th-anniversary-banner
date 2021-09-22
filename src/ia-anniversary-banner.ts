@@ -118,6 +118,10 @@ export class IaAnniversaryBanner extends LitElement {
     `;
   }
 
+  bannerClick() {
+    this.dispatchEvent(new Event('bannerClick'));
+  }
+
   render() {
     if (this.viewMode === BannerViewMode.Closed) {
       return nothing;
@@ -130,6 +134,7 @@ export class IaAnniversaryBanner extends LitElement {
           href=${link}
           alt="Come celebrate 25 years with us."
           data-event-click-tracking="Anniv25Banner|Homepage"
+          @click=${this.bannerClick}
         >
           <div>
             <figure>
