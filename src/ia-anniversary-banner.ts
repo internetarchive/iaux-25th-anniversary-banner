@@ -313,7 +313,7 @@ export class IaAnniversaryBanner extends LitElement {
           background-image: url('https://archive.org/download/ia-25-home-square-optimized/ia-anniv-banner-bg-mobile.png');
         }
 
-        .wayback.banner {
+        .wayforward.banner {
           background-image: url('https://archive.org/download/ia-25-home-square-optimized/ia-anniv-wayforward-banner-mobile.png');
         }
       }
