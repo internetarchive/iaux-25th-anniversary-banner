@@ -4,7 +4,10 @@ import '../src/ia-anniversary-banner';
 @customElement('app-root')
 export class AppRoot extends LitElement {
   render() {
-    return html` <ia-anniversary-banner></ia-anniversary-banner> `;
+    return html`
+      <ia-anniversary-banner></ia-anniversary-banner>
+      <ia-anniversary-banner bannerType="wayforward"></ia-anniversary-banner>
+    `;
   }
 
   static get styles() {

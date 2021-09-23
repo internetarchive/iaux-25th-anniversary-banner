@@ -18,9 +18,26 @@ enum BannerViewMode {
   Open = 'open',
   Closed = 'closed',
 }
+
+enum BannerTypes {
+  Anniversary = 'anniversary',
+  Wayforward = 'wayforward',
+}
+
+enum BannerAltText {
+  Anniversary = 'Come celebrate 25 years with us.',
+  Wayforward = 'Travel with us to 2046 and imagine the future of the internet.',
+}
+
+enum BannerLinks {
+  Anniversary = 'https://anniversary.archive.org',
+  Wayforward = 'https://wayforward.archive.org',
+}
 @customElement('ia-anniversary-banner')
 export class IaAnniversaryBanner extends LitElement {
   @property({ type: Number }) toggleTextSeconds: number = 3;
+
+  @property({ type: Boolean }) intervalStarted: boolean = false;
 
   @property({ type: String }) textShown: 'main' | 'cta' = 'main';
 
@@ -32,7 +49,7 @@ export class IaAnniversaryBanner extends LitElement {
 
   @property({ type: String }) viewMode: BannerViewMode = BannerViewMode.Open;
 
-  @property({ type: Boolean }) intervalStarted: boolean = false;
+  @property({ type: String }) bannerType: BannerTypes = BannerTypes.Anniversary;
 
   disconnectedCallback() {
     this.clearInterval();
@@ -120,27 +137,45 @@ export class IaAnniversaryBanner extends LitElement {
     this.dispatchEvent(new Event('bannerClick'));
   }
 
+  get annivBanner() {
+    return html`
+      <div>
+        <figure class="anniversary banner">
+          ${this.mobileBanner} ${this.desktopBanner}
+          <figcaption>
+            Homepage banner celebrating 25 years of the Internet Archive.
+          </figcaption>
+        </figure>
+      </div>
+    `;
+  }
+
+  get wayforwardBanner() {
+    return html` <figure class="wayforward banner"></figure> `;
+  }
+
   render() {
     if (this.viewMode === BannerViewMode.Closed) {
       return nothing;
     }
 
-    const link = 'https://anniversary.archive.org';
+    const link =
+      this.bannerType === BannerTypes.Wayforward
+        ? BannerLinks.Wayforward
+        : BannerLinks.Anniversary;
+    const linkAltText =
+      this.bannerType === BannerTypes.Wayforward
+        ? BannerAltText.Wayforward
+        : BannerAltText.Anniversary;
+    const bannerToDraw =
+      this.bannerType === BannerTypes.Wayforward
+        ? this.wayforwardBanner
+        : this.annivBanner;
+
     return html`
-      <section>
-        <a
-          href=${link}
-          alt="Come celebrate 25 years with us."
-          @click=${this.bannerClick}
-        >
-          <div>
-            <figure>
-              ${this.mobileBanner} ${this.desktopBanner}
-              <figcaption>
-                Homepage banner celebrating 25 years of the Internet Archive.
-              </figcaption>
-            </figure>
-          </div>
+      <section class=${this.bannerType}>
+        <a href=${link} alt=${linkAltText} @click=${this.bannerClick}>
+          ${bannerToDraw}
         </a>
         <button
           class="close-banner"
@@ -163,6 +198,7 @@ export class IaAnniversaryBanner extends LitElement {
     const mobileHeight = css`var(--annivBannerMobileHeight, 52px)`;
     const height = css`var(--annivBannerHeight, 90px)`;
     const closeButtonFill = css`var(--annivBannerCloseButtonFill, #222)`;
+    const wayforwardButtonFill = css`#fff`;
     return css`
       section {
         position: relative;
@@ -214,12 +250,24 @@ export class IaAnniversaryBanner extends LitElement {
         fill: ${closeButtonFill};
       }
 
-      figure {
+      .wayforward .close-banner .fill-color {
+        fill: ${wayforwardButtonFill};
+      }
+
+      .banner {
         margin: 0;
         background-image: url('https://archive.org/download/ia-25-home-square-optimized/ia-25-banner-bg.png');
         background-repeat: no-repeat;
         background-size: 100% 100%;
         height: ${height};
+      }
+
+      .anniversary.banner {
+        background-image: url('https://archive.org/download/ia-25-home-square-optimized/ia-25-banner-bg.png');
+      }
+
+      .wayforward.banner {
+        background-image: url('https://archive.org/download/ia-25-home-square-optimized/ia-anniv-wayforward-banner-desktop.png');
       }
 
       figcaption {
@@ -261,8 +309,12 @@ export class IaAnniversaryBanner extends LitElement {
           display: none;
         }
 
-        figure {
+        .anniversary.banner {
           background-image: url('https://archive.org/download/ia-25-home-square-optimized/ia-anniv-banner-bg-mobile.png');
+        }
+
+        .wayback.banner {
+          background-image: url('https://archive.org/download/ia-25-home-square-optimized/ia-anniv-wayforward-banner-mobile.png');
         }
       }
     `;
