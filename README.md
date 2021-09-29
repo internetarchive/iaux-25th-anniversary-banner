@@ -2,6 +2,10 @@
 
 # IA 25th Anniversary Banner
 Happy 25th anniversary, Internet Archive!
+
+Anniversary banner: v1.1.0
+
+Wayforward banner: v2.0.0
 ## Local Demo with `web-dev-server`
 ```bash
 yarn start
