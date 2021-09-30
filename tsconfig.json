@@ -16,5 +16,5 @@
     "rootDir": "./",
     "declaration": true
   },
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts", "tests/ia-anniversary-banner.test.js"]
 }

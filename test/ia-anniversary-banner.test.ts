@@ -11,7 +11,6 @@ describe('IaAnniversaryBanner', () => {
 
     expect(el.hideBannerDays).to.equal(3);
     expect(el.viewMode).to.equal('open');
-    expect(el.intervalStarted).to.equal(true);
   });
 
   it('emits event: `bannerClick` when banner is clicked', async () => {
