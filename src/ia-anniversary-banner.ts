@@ -28,8 +28,19 @@ export class IaAnniversaryBanner extends LitElement {
 
     return html`
       <section clas="wayforward">
-        <a href=${link} alt=${linkAltText} @click=${this.bannerClick}>
-          <figure class="wayforward banner"></figure>
+        <a href=${link} title=${linkAltText} @click=${this.bannerClick}>
+          <figure class="wayforward banner">
+            <img
+              class="banner-img desktop"
+              alt="the wayforward machine"
+              src="https://archive.org/download/ia-25-wf/wf-banner-desktop.png"
+            />
+            <img
+              class="banner-img mobile"
+              alt="the wayforward machine"
+              src="https://archive.org/download/ia-25-wf/wf-banner-mobile.png"
+            />
+          </figure>
         </a>
         <button
           class="close-banner"
@@ -49,7 +60,8 @@ export class IaAnniversaryBanner extends LitElement {
 
   static get styles() {
     const mobileHeight = css`var(--annivBannerMobileHeight, 60px)`;
-    const wideHeight = css`var(--annivBannerWideHeight, 100px)`;
+    const wideHeight = css`var(--annivBannerWideHeight, 90px)`;
+
     const height = css`var(--annivBannerHeight, 90px)`;
     const closeButtonFill = css`var(--annivBannerCloseButtonFill, #fff)`;
     return css`
@@ -63,6 +75,16 @@ export class IaAnniversaryBanner extends LitElement {
         display: block;
         overflow: hidden;
         height: inherit;
+      }
+
+      img.banner-img {
+        max-height: 100%;
+        display: block;
+        margin: auto;
+      }
+
+      .banner-img.desktop {
+        display: none;
       }
 
       .close-banner {
@@ -94,10 +116,10 @@ export class IaAnniversaryBanner extends LitElement {
       .banner {
         margin: 0;
         background-image: url('https://archive.org/download/ia-25-wf/wf-banner-desktop.png');
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-position: center center;
         height: ${height};
+        background-size: cover;
+        background-repeat: round;
+        background-position: unset;
       }
 
       figcaption {
@@ -107,13 +129,7 @@ export class IaAnniversaryBanner extends LitElement {
         position: relative;
       }
 
-      @media screen and (max-width: 767px) {
-        .wayforward.banner {
-          background-image: url('https://archive.org/download/ia-25-wf/wf-banner-mobile.png');
-        }
-      }
-
-      @media screen and (max-width: 600px) {
+      @media screen and (max-width: 550px) {
         :host {
           --annivBannerHeight: ${mobileHeight};
         }
@@ -122,6 +138,14 @@ export class IaAnniversaryBanner extends LitElement {
       @media screen and (min-width: 1300px) {
         :host {
           --annivBannerHeight: ${wideHeight};
+        }
+
+        .banner-img.desktop {
+          display: block;
+        }
+
+        .banner-img.mobile {
+          display: none;
         }
       }
     `;
