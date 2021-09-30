@@ -49,6 +49,7 @@ export class IaAnniversaryBanner extends LitElement {
 
   static get styles() {
     const mobileHeight = css`var(--annivBannerMobileHeight, 60px)`;
+    const wideHeight = css`var(--annivBannerWideHeight, 100px)`;
     const height = css`var(--annivBannerHeight, 90px)`;
     const closeButtonFill = css`var(--annivBannerCloseButtonFill, #fff)`;
     return css`
@@ -94,7 +95,7 @@ export class IaAnniversaryBanner extends LitElement {
         margin: 0;
         background-image: url('https://archive.org/download/ia-25-wf/wf-banner-desktop.png');
         background-repeat: no-repeat;
-        background-size: 100% 100%;
+        background-size: cover;
         background-position: center center;
         height: ${height};
       }
@@ -115,6 +116,12 @@ export class IaAnniversaryBanner extends LitElement {
       @media screen and (max-width: 600px) {
         :host {
           --annivBannerHeight: ${mobileHeight};
+        }
+      }
+
+      @media screen and (min-width: 1300px) {
+        :host {
+          --annivBannerHeight: ${wideHeight};
         }
       }
     `;
