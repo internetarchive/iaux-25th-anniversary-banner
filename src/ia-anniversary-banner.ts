@@ -32,14 +32,29 @@ export class IaAnniversaryBanner extends LitElement {
           <picture class="wayforward banner">
             <source
               srcset="
-                https://archive.org/download/ia-25-wf/wf-banner-mobile-tiny.png
+                https://archive.org/download/ia-25-wf/wf-banner-mobile.avif
               "
               media="(max-width: 1000px)"
+              type="image/avif"
+            />
+            <source
+              srcset="
+                https://archive.org/download/ia-25-wf/wf-banner-desktop.avif
+              "
+              media="(min-width: 1001px)"
+              type="image/avif"
             />
             <img
               class="banner-img mobile"
               alt="the wayforward machine"
               src="https://archive.org/download/ia-25-wf/wf-banner-desktop-tiny.png"
+            />
+            <source
+              srcset="
+                https://archive.org/download/ia-25-wf/wf-banner-mobile-tiny.png
+              "
+              media="(max-width: 1000px)"
+              type="image/png"
             />
           </picture>
         </a>
