@@ -39,6 +39,13 @@ export class IaAnniversaryBanner extends LitElement {
             />
             <source
               srcset="
+                https://archive.org/download/ia-25-wf/wf-banner-mobile-tiny.png
+              "
+              media="(max-width: 1000px)"
+              type="image/png"
+            />
+            <source
+              srcset="
                 https://archive.org/download/ia-25-wf/wf-banner-desktop.avif
               "
               media="(min-width: 1001px)"
@@ -48,13 +55,6 @@ export class IaAnniversaryBanner extends LitElement {
               class="banner-img mobile"
               alt="the wayforward machine"
               src="https://archive.org/download/ia-25-wf/wf-banner-desktop-tiny.png"
-            />
-            <source
-              srcset="
-                https://archive.org/download/ia-25-wf/wf-banner-mobile-tiny.png
-              "
-              media="(max-width: 1000px)"
-              type="image/png"
             />
           </picture>
         </a>
@@ -127,7 +127,7 @@ export class IaAnniversaryBanner extends LitElement {
 
       .banner {
         margin: 0;
-        background-image: url('https://archive.org/download/ia-25-wf/wf-banner-desktop-tiny.png');
+        background: url('https://archive.org/download/ia-25-wf/wf-banner-desktop-tiny.png'); /* safari compat */
         height: ${height};
         background-size: cover;
         background-repeat: round;
