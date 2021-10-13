@@ -29,18 +29,34 @@ export class IaAnniversaryBanner extends LitElement {
     return html`
       <section clas="wayforward">
         <a href=${link} title=${linkAltText} @click=${this.bannerClick}>
-          <figure class="wayforward banner">
-            <img
-              class="banner-img desktop"
-              alt="the wayforward machine"
-              src="https://archive.org/download/ia-25-wf/wf-banner-desktop.png"
+          <picture class="wayforward banner">
+            <source
+              srcset="
+                https://archive.org/download/ia-25-wf/wf-banner-mobile.avif
+              "
+              media="(max-width: 1000px)"
+              type="image/avif"
+            />
+            <source
+              srcset="
+                https://archive.org/download/ia-25-wf/wf-banner-mobile-tiny.png
+              "
+              media="(max-width: 1000px)"
+              type="image/png"
+            />
+            <source
+              srcset="
+                https://archive.org/download/ia-25-wf/wf-banner-desktop.avif
+              "
+              media="(min-width: 1001px)"
+              type="image/avif"
             />
             <img
               class="banner-img mobile"
               alt="the wayforward machine"
-              src="https://archive.org/download/ia-25-wf/wf-banner-mobile.png"
+              src="https://archive.org/download/ia-25-wf/wf-banner-desktop-tiny.png"
             />
-          </figure>
+          </picture>
         </a>
         <button
           class="close-banner"
@@ -83,10 +99,6 @@ export class IaAnniversaryBanner extends LitElement {
         margin: auto;
       }
 
-      .banner-img.desktop {
-        display: none;
-      }
-
       .close-banner {
         background-color: Transparent;
         background-repeat: no-repeat;
@@ -115,11 +127,12 @@ export class IaAnniversaryBanner extends LitElement {
 
       .banner {
         margin: 0;
-        background-image: url('https://archive.org/download/ia-25-wf/wf-banner-desktop.png');
+        background: url('https://archive.org/download/ia-25-wf/wf-banner-desktop-tiny.png'); /* safari compat */
         height: ${height};
         background-size: cover;
         background-repeat: round;
         background-position: unset;
+        display: block;
       }
 
       figcaption {
@@ -138,14 +151,6 @@ export class IaAnniversaryBanner extends LitElement {
       @media screen and (min-width: 1300px) {
         :host {
           --annivBannerHeight: ${wideHeight};
-        }
-
-        .banner-img.desktop {
-          display: block;
-        }
-
-        .banner-img.mobile {
-          display: none;
         }
       }
     `;
